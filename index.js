@@ -59,7 +59,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
     return false;
   }
 
-  return SVGComponentTransferFunctionElement;
+  return true;
 }
 
 async function main() {
