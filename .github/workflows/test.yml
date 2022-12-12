@@ -6,13 +6,8 @@ on:
         type: string
         description: 'Semver release tag e.g. v1.1.0'
         required: true
-  workflow_run:
-    workflows: [Release]
-    types:
-      - completed
 jobs:
   tidy-jira:
-    needs: [on-success-or-workflow-dispatch]
     runs-on: ubuntu-latest
     steps:
       - name: Tidy Jira
@@ -24,5 +19,5 @@ jobs:
           jira_jql_filter: ${{ secrets.jira_jql_filter }}
           jira_closed_id: ${{ secrets.jira_closed_id }}
           jira_github_url_field_id: ${{ secrets.jira_github_url_field_id }}
-          github_release_name: ${{ needs.on-success-or-workflow-dispatch.outputs.release-tag }}
+          github_release_name: ${{ github.event.inputs.release-tag }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
