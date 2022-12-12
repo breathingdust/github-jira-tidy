@@ -1,0 +1,31 @@
+name: 'GitHub Jira Tidy'
+description: 'Given a specified release and equivalently named milestone, this action will examine issues/prs within that release and check to see if a Jira exists with that issue set as a field. If so, it will transition that issue to a specified status and comment as to which release the Jira was closed with'
+inputs:
+  jira_host:
+    description: 'Jira host to use.'
+    required: true
+  jira_username:
+    description: 'Username for Jira user to authenticate as.'
+    required: true
+  jira_password:
+    description: 'Password/ApiKey for Jira user to authenticate as.'
+    required: true
+  jira_jql_filter:
+    description: 'When searching for a matching issue, this field lets you specify an initial filter. (eg project)'
+    required: true
+  jira_closed_id:
+    description: 'Id of the status you wish to transition to when a matching Jira is found.'
+    required: true
+  jira_github_url_field_id:
+    description: 'Custom field id to use when searching for a matching GitHub URL.'
+    required: true
+  github_release_name:
+    description: 'Name of release to match milestone on'
+    required: true
+  github_token:
+    description: 'GitHub Token.'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'index.js'
