@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tidy Jira
-        uses: breathingdust/github-jira-tidy@v0.3.0
+        uses: breathingdust/github-jira-tidy@v0.4.0
         with:
           jira_host: ${{ secrets.jira_host }}
           jira_username: ${{ secrets.jira_username }}
