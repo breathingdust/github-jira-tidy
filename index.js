@@ -55,7 +55,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
   try {
     await jira.transitionIssue(tasks[0].id, transitionObject);
   } catch (error) {
-    core.setFailed(`Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`);
+    core.setFailed(`Error transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID} ${error}`);
     return false;
   }
 
