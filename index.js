@@ -7,13 +7,13 @@ const JIRA_USERNAME = core.getInput('jira_username');
 const JIRA_PASSWORD = core.getInput('jira_password');
 const JIRA_JQL_FILTER = core.getInput('jira_jql_filter');
 const JIRA_CLOSED_ID = core.getInput('jira_closed_id');
-const JIRA_GITHUB_URL_FIELD_GID = core.getInput('jira_github_url_field_gid');
+const JIRA_GITHUB_URL_FIELD_ID = core.getInput('jira_github_url_field_id');
 const GITHUB_RELEASE_NAME = core.getInput('github_release_name');
 
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
 async function checkAndCloseLinkedJira(jira, issueUrl) {
-  const query = `${JIRA_JQL_FILTER} AND ${JIRA_GITHUB_URL_FIELD_GID} = "${issueUrl}"`;
+  const query = `${JIRA_JQL_FILTER} AND ${JIRA_GITHUB_URL_FIELD_ID} = "${issueUrl}"`;
 
   let tasks = [];
 
