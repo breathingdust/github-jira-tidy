@@ -30,7 +30,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
     core.setFailed(`Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`);
     return false;
   }
-  const commentBody = `(Automated Message)The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}]  of the provider. 🎉`;
+  const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
 
   const transitionObject = {
     update: {
