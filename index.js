@@ -25,10 +25,11 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
       core.info(`Jira ${tasks[0].key} found for ${issueUrl}`);
     } else {
       core.info(`No Jira found for ${issueUrl}`);
+      return;
     }
   } catch (error) {
     core.setFailed(`Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`);
-    return false;
+    return;
   }
   const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
 
@@ -53,13 +54,11 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
   };
 
   try {
+    core.info(`Transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID}.`);
     await jira.transitionIssue(tasks[0].id, transitionObject);
   } catch (error) {
     core.setFailed(`Error transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID} ${error}`);
-    return false;
   }
-
-  return true;
 }
 
 async function main() {

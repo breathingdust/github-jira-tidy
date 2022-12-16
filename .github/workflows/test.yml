@@ -13,7 +13,7 @@ jobs:
       - name: Tidy Jira
         uses: breathingdust/github-jira-tidy@v0.6.0
         with:
-          jira_host: ${{ secrets.jira_host }}
+          jira_host: hashicorp.atlassian.net
           jira_username: ${{ secrets.jira_username }}
           jira_password: ${{ secrets.jira_password }}
           jira_jql_filter: ${{ secrets.jira_jql_filter }}

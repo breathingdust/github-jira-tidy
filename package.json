@@ -1,21 +1,7 @@
 {
   "name": "github-jira-tidy",
   "version": "1.0.0",
-  "description": "Closes and comments on Jira issues based based on release contents",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/breathingdust/github-jira-tidy.git"
-  },
-  "author": "Simon Davis",
-  "license": "MPL-2.0",
-  "bugs": {
-    "url": "https://github.com/breathingdust/github-jira-tidy/issues"
-  },
-  "homepage": "https://github.com/breathingdust/github-jira-tidy#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@octokit/action": "^4.0.10",
