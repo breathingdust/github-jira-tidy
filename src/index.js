@@ -28,7 +28,9 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
       return;
     }
   } catch (error) {
-    core.setFailed(`Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`);
+    core.setFailed(
+      `Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`,
+    );
     return;
   }
   const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
@@ -54,10 +56,14 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
   };
 
   try {
-    core.info(`Transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID}.`);
+    core.info(
+      `Transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID}.`,
+    );
     await jira.transitionIssue(tasks[0].id, transitionObject);
   } catch (error) {
-    core.setFailed(`Error transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID} ${error}`);
+    core.setFailed(
+      `Error transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID} ${error}`,
+    );
   }
 }
 
@@ -80,7 +86,9 @@ async function main() {
     issues = await octokit.paginate(octokit.rest.search.issuesAndPullRequests, {
       q: `user:${owner} repo:${repo} milestone:${GITHUB_RELEASE_NAME}`,
     });
-    core.info(`Found ${issues.length} issue(s) in release ${GITHUB_RELEASE_NAME}`);
+    core.info(
+      `Found ${issues.length} issue(s) in release ${GITHUB_RELEASE_NAME}`,
+    );
   } catch (error) {
     core.setFailed(`Error retrieving release by tag ${GITHUB_RELEASE_NAME}`);
   }
@@ -88,9 +96,9 @@ async function main() {
   for (let index = 0; index < issues.length; index += 1) {
     const issue = issues[index];
     await checkAndCloseLinkedJira(jira, issue.html_url);
-    await new Promise(r => setTimeout(r, 1000)); // sleep to avoid rate limit
+    await new Promise((r) => setTimeout(r, 1000)); // sleep to avoid rate limit
   }
-  /* eslint-disable */  
+  /* eslint-disable */
 }
 
 try {
