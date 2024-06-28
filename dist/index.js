@@ -65785,7 +65785,9 @@ async function main() {
       `Found ${issues.length} issue(s) in release ${GITHUB_RELEASE_NAME}`,
     );
   } catch (error) {
-    core.setFailed(`Error retrieving release by tag ${GITHUB_RELEASE_NAME}`);
+    core.setFailed(
+      `Error retrieving release by tag ${GITHUB_RELEASE_NAME} ${error}`,
+    );
   }
   /* eslint-disable */
   for (let index = 0; index < issues.length; index += 1) {
