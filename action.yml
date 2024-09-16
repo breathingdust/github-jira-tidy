@@ -2,10 +2,10 @@ name: 'GitHub Jira Tidy'
 description: 'Given a specified release and equivalently named milestone, this action will examine issues/prs within that release and check to see if a Jira exists with that issue set as a field. If so, it will transition that issue to a specified status and comment as to which release the Jira was closed with'
 inputs:
   jira_host:
-    description: 'Jira host to use.'
+    description: 'Jira host to use. eg. "foocorp.atlassian.net"'
     required: true
   jira_username:
-    description: 'Username for Jira user to authenticate as.'
+    description: 'Username for Jira user to authenticate as. eg. "dave@foocorp.com"'
     required: true
   jira_password:
     description: 'Password/ApiKey for Jira user to authenticate as.'
@@ -20,7 +20,7 @@ inputs:
     description: 'Custom field id to use when searching for a matching GitHub URL.'
     required: true
   github_release_name:
-    description: 'Name of release to match milestone on'
+    description: 'Name of release to match milestone on.'
     required: true
   github_token:
     description: 'GitHub Token.'

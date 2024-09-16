@@ -6,33 +6,48 @@ const JIRA_HOST = core.getInput('jira_host');
 const JIRA_USERNAME = core.getInput('jira_username');
 const JIRA_PASSWORD = core.getInput('jira_password');
 const JIRA_JQL_FILTER = core.getInput('jira_jql_filter');
-const JIRA_CLOSED_ID = core.getInput('jira_closed_id');
 const JIRA_GITHUB_URL_FIELD_ID = core.getInput('jira_github_url_field_id');
 const GITHUB_RELEASE_NAME = core.getInput('github_release_name');
 
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
+async function getTransitionForIssueType(issue) {
+  if (issue.issuetype.name === 'Story' || issue.issuetype.name === 'Task') {
+    return 81;
+  }
+  if (issue.issuetype.name === 'Feature Request' || issue.issuetype.name === 'Bug') {
+    return 371;
+  }
+  core.setFailed(
+    `Error determining transition type for jira ${issue.key}`,
+  );
+  return null;
+}
+
 async function checkAndCloseLinkedJira(jira, issueUrl) {
   const query = `${JIRA_JQL_FILTER} AND ${JIRA_GITHUB_URL_FIELD_ID} = "${issueUrl}"`;
 
-  let tasks = [];
+  let issue = null;
 
   try {
     const searchResults = await jira.searchJira(query);
-    tasks = searchResults.issues;
 
-    if (tasks.length > 0) {
-      core.info(`Jira ${tasks[0].key} found for ${issueUrl}`);
+    if (searchResults.issues.length > 0) {
+      [issue] = searchResults.issues;
+      core.info(`Jira ${issue.key} found for ${issueUrl}`);
     } else {
       core.info(`No Jira found for ${issueUrl}`);
       return;
     }
   } catch (error) {
     core.setFailed(
-      `Error searching jira tasks by ${JIRA_JQL_FILTER} and ${issueUrl} ${error}`,
+      `Error searching jira tasks by ${query} ${error}`,
     );
     return;
   }
+
+  const transitionId = await getTransitionForIssueType(issue.fields)
+
   const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
 
   const transitionObject = {
@@ -46,7 +61,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
       ],
     },
     transition: {
-      id: `${JIRA_CLOSED_ID}`,
+      id: `${transitionId}`,
     },
     fields: {
       resolution: {
@@ -57,12 +72,12 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
 
   try {
     core.info(
-      `Transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID}.`,
+      `Transitioning jira task ${issue.id} to status ${transitionId}.`,
     );
-    await jira.transitionIssue(tasks[0].id, transitionObject);
+    await jira.transitionIssue(issue.id, transitionObject);
   } catch (error) {
     core.setFailed(
-      `Error transitioning jira task ${tasks[0].id} to status ${JIRA_CLOSED_ID} ${error}`,
+      `Error transitioning jira task ${issue.id} to status ${transitionId} ${error}`,
     );
   }
 }
@@ -84,7 +99,7 @@ async function main() {
 
   try {
     issues = await octokit.paginate(octokit.rest.search.issuesAndPullRequests, {
-      q: `user:${owner} repo:${repo} milestone:${GITHUB_RELEASE_NAME}`,
+      q: `org:${owner} repo:${repo} milestone:${GITHUB_RELEASE_NAME}`,
     });
     core.info(
       `Found ${issues.length} issue(s) in release ${GITHUB_RELEASE_NAME}`,
