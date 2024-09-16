@@ -15,12 +15,13 @@ async function getTransitionForIssueType(issue) {
   if (issue.issuetype.name === 'Story' || issue.issuetype.name === 'Task') {
     return 81;
   }
-  if (issue.issuetype.name === 'Feature Request' || issue.issuetype.name === 'Bug') {
+  if (
+    issue.issuetype.name === 'Feature Request' ||
+    issue.issuetype.name === 'Bug'
+  ) {
     return 371;
   }
-  core.setFailed(
-    `Error determining transition type for jira ${issue.key}`,
-  );
+  core.setFailed(`Error determining transition type for jira ${issue.key}`);
   return null;
 }
 
@@ -40,13 +41,11 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
       return;
     }
   } catch (error) {
-    core.setFailed(
-      `Error searching jira tasks by ${query} ${error}`,
-    );
+    core.setFailed(`Error searching jira tasks by ${query} ${error}`);
     return;
   }
 
-  const transitionId = await getTransitionForIssueType(issue.fields)
+  const transitionId = await getTransitionForIssueType(issue.fields);
 
   const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
 
@@ -71,9 +70,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
   };
 
   try {
-    core.info(
-      `Transitioning jira task ${issue.id} to status ${transitionId}.`,
-    );
+    core.info(`Transitioning jira task ${issue.id} to status ${transitionId}.`);
     await jira.transitionIssue(issue.id, transitionObject);
   } catch (error) {
     core.setFailed(
