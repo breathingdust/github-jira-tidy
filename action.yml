@@ -13,9 +13,6 @@ inputs:
   jira_jql_filter:
     description: 'When searching for a matching issue, this field lets you specify an initial filter. (eg project)'
     required: true
-  jira_closed_id:
-    description: 'Id of the status you wish to transition to when a matching Jira is found.'
-    required: true
   jira_github_url_field_id:
     description: 'Custom field id to use when searching for a matching GitHub URL.'
     required: true
