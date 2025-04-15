@@ -106,13 +106,11 @@ async function main() {
       `Error retrieving release by tag ${GITHUB_RELEASE_NAME} ${error}`,
     );
   }
-  /* eslint-disable */
   for (let index = 0; index < issues.length; index += 1) {
     const issue = issues[index];
     await checkAndCloseLinkedJira(jira, issue.html_url);
     await new Promise((r) => setTimeout(r, 1000)); // sleep to avoid rate limit
   }
-  /* eslint-disable */
 }
 
 try {
