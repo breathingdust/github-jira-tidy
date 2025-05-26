@@ -22,7 +22,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@octokit/action": "^7.0.2",
-    "@octokit/core": "^6.1.5",
+    "@octokit/core": "^7.0.2",
     "jira-client": "^8.2.2"
   },
   "devDependencies": {
