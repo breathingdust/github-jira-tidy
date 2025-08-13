@@ -11,18 +11,11 @@ const GITHUB_RELEASE_NAME = core.getInput('github_release_name');
 
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
-async function getTransitionForIssueType(issue) {
-  if (issue.issuetype.name === 'Story' || issue.issuetype.name === 'Task') {
-    return 81;
+async function getTransitionForProject(fields) {
+  if (fields.project.key === "FRB") {
+    return 51;
   }
-  if (
-    issue.issuetype.name === 'Feature Request' ||
-    issue.issuetype.name === 'Bug'
-  ) {
-    return 371;
-  }
-  core.setFailed(`Error determining transition type for jira ${issue.key}`);
-  return null;
+  return 5
 }
 
 async function checkAndCloseLinkedJira(jira, issueUrl) {
@@ -45,7 +38,7 @@ async function checkAndCloseLinkedJira(jira, issueUrl) {
     return;
   }
 
-  const transitionId = await getTransitionForIssueType(issue.fields);
+  const transitionId = await getTransitionForProject(issue.fields);
 
   const commentBody = `(Automated Message) The GitHub issue linked to this Jira has been resolved in [${GITHUB_RELEASE_NAME}|https://github.com/${owner}/${repo}/releases/tag/${GITHUB_RELEASE_NAME}] of ${repo}. 🎉`;
 
