@@ -12,10 +12,10 @@ const GITHUB_RELEASE_NAME = core.getInput('github_release_name');
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
 async function getTransitionForProject(fields) {
-  if (fields.project.key === "FRB") {
+  if (fields.project.key === 'FRB') {
     return 51;
   }
-  return 5
+  return 5;
 }
 
 async function checkAndCloseLinkedJira(jira, issueUrl) {
