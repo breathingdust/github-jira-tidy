@@ -88,7 +88,7 @@ async function main() {
   let issues = [];
 
   try {
-    issues = await octokit.paginate(octokit.rest.search.issues, {
+    issues = await octokit.paginate(octokit.rest.search.issuesAndPullRequests, {
       q: `org:${owner} repo:${repo} milestone:${GITHUB_RELEASE_NAME}`,
     });
     core.info(
