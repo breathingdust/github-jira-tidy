@@ -23,5 +23,6 @@ pids
 
 node_modules/
 
-secrets
-scratch.txt
+/secrets
+/scratch.txt
+/*.json
