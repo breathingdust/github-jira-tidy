@@ -16,13 +16,13 @@ async function getTransitionForProject(fields) {
 }
 
 async function request(url, body, method = 'GET') {
-  const query = `https://${JIRA_HOST}/rest/api/2/${url}`;
+  const query = `https://${JIRA_HOST}/rest/api/3/${url}`;
   return fetch(query, {
     method: method,
     headers: {
-      Authorization: `Basic ${Buffer.from(`${JIRA_USERNAME}:${JIRA_PASSWORD}`).toString('base64')}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Authorization': `Basic ${Buffer.from(`${JIRA_USERNAME}:${JIRA_PASSWORD}`).toString('base64')}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: body ? JSON.stringify(body) : undefined,
   })
