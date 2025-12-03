@@ -20,9 +20,9 @@ async function request(url, body, method = 'GET') {
   return fetch(query, {
     method: method,
     headers: {
-      'Authorization': `Basic ${Buffer.from(`${JIRA_USERNAME}:${JIRA_PASSWORD}`).toString('base64')}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Authorization: `Basic ${Buffer.from(`${JIRA_USERNAME}:${JIRA_PASSWORD}`).toString('base64')}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     body: body ? JSON.stringify(body) : undefined,
   })
