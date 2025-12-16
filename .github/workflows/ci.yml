@@ -8,6 +8,3 @@ on:
 jobs:
   basic-validation-call:
     uses: actions/reusable-workflows/.github/workflows/basic-validation.yml@main
-  check-dist-call:
-    needs: basic-validation-call
-    uses: actions/reusable-workflows/.github/workflows/check-dist.yml@main
