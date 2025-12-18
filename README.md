@@ -1,6 +1,10 @@
 # GitHub Jira Tidy
 
-This is a simple GitHub action to help close Jira issues associated to a GitHub issue based on a custom field. This is based on the contents of a release with an equivalently named milestone. When matched, the action will transition the issue to a specified status with a resolution of 'Done' and comment as to which release the issue was closed in.
+This is a simple GitHub Action to help close Jira issues associated to a GitHub
+issue based on a custom field. This is based on the contents of a release with
+an equivalently named milestone. When matched, the action will transition the
+issue to a specified status with a resolution of 'Done' and comment as to which
+release the issue was closed in.
 
 ## General Usage
 
@@ -27,11 +31,8 @@ on:
           jira_password: ${{ secrets.jira_password }}
           jira_jql_filter: 'project in ("FOO","BAR") and "Team" = "beans"'
           jira_closed_id: '371'
-          jira_github_url_field_id: 'cf[10101]'
-          github_release_name: ${{ needs.on-success-or-workflow-dispatch.outputs.release-tag }}
+          jira_github_url_field_id: 'Issue Link'
+          github_release_name:
+            ${{ needs.on-success-or-workflow-dispatch.outputs.release-tag }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-## License
-
-The scripts and documentation in this project are released under the [MIT License](LICENSE)
