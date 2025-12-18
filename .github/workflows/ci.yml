@@ -57,10 +57,10 @@ jobs:
         id: test-action
         uses: ./
         with:
-          github_release_name: "v6.27.0"
-          github_token: ""
-          jira_github_url_field_id: "Field Id"
-          jira_host: "foo.atlassian.com"
-          jira_jql_filter: "project=FOO"
-          jira_password: ""
-          jira_username: "user@example.com"
+          github_release_name: 'v6.27.0'
+          github_token: ''
+          jira_github_url_field_id: 'Field Id'
+          jira_host: 'foo.atlassian.com'
+          jira_jql_filter: 'project=FOO'
+          jira_password: ''
+          jira_username: 'user@example.com'
