@@ -27,11 +27,7 @@ on:
           jira_password: ${{ secrets.jira_password }}
           jira_jql_filter: 'project in ("FOO","BAR") and "Team" = "beans"'
           jira_closed_id: '371'
-          jira_github_url_field_id: 'cf[10101]'
+          jira_github_url_field_id: "Issue Link"
           github_release_name: ${{ needs.on-success-or-workflow-dispatch.outputs.release-tag }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-## License
-
-The scripts and documentation in this project are released under the [MIT License](LICENSE)
