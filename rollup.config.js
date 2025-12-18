@@ -7,11 +7,10 @@ const config = {
   input: 'src/index.js',
   output: {
     esModule: true,
-    file: 'dist/index.js',
+    dir: './dist',
     format: 'es',
     sourcemap: true
   },
-  external: [/^node:/, '@actions/core', '@octokit/action', 'node-fetch'],
   plugins: [commonjs(), nodeResolve({ preferBuiltins: true })]
 }
 
