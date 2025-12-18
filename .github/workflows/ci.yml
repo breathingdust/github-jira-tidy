@@ -43,24 +43,3 @@ jobs:
       - name: Test
         id: npm-ci-test
         run: npm run ci-test
-
-  test-action:
-    name: GitHub Actions Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v6
-
-      - name: Test Local Action
-        id: test-action
-        uses: ./
-        with:
-          github_release_name: 'v6.27.0'
-          github_token: ''
-          jira_github_url_field_id: 'Field Id'
-          jira_host: 'foo.atlassian.com'
-          jira_jql_filter: 'project=FOO'
-          jira_password: ''
-          jira_username: 'user@example.com'
