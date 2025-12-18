@@ -64,7 +64,3 @@ jobs:
           jira_jql_filter: "project=FOO"
           jira_password: ""
           jira_username: "user@example.com"
-
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
