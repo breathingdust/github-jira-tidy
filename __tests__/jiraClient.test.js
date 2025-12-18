@@ -14,7 +14,7 @@ mockCore.getInput.mockImplementation((input) => {
     jira_username: 'test@example.com',
     jira_password: 'password123',
     jira_jql_filter: 'project = TEST',
-    jira_github_url_field_id: 'cf[10001]'
+    jira_github_url_field_id: 'Issue Link[URL Field]'
   }
   return inputs[input] || ''
 })
@@ -47,7 +47,7 @@ describe('jiraClient', () => {
       const result = await findByIssue('https://github.com/owner/repo/issues/1')
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://test.atlassian.net/rest/api/3/search/jql?jql=project%20%3D%20TEST%20AND%20cf%5B10001%5D%20%3D%20%22https%3A%2F%2Fgithub.com%2Fowner%2Frepo%2Fissues%2F1%22&fields=project',
+        'https://test.atlassian.net/rest/api/3/search/jql?jql=project%20%3D%20TEST%20AND%20%22Issue%20Link%5BURL%20Field%5D%22%20%3D%20%22https%3A%2F%2Fgithub.com%2Fowner%2Frepo%2Fissues%2F1%22&fields=project',
         expect.objectContaining({
           method: 'GET',
           headers: expect.objectContaining({
