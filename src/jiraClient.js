@@ -14,8 +14,8 @@ async function getTransitionForProject(fields) {
   return 5
 }
 
-async function request(url, body, method = 'GET') {
-  const query = `https://${JIRA_HOST}/rest/api/3/${url}`
+async function request(apiVersion, url, body, method = 'GET') {
+  const query = `https://${JIRA_HOST}/rest/api/${apiVersion}/${url}`
   return fetch(query, {
     method: method,
     headers: {
@@ -24,16 +24,16 @@ async function request(url, body, method = 'GET') {
       'Content-Type': 'application/json'
     },
     body: body ? JSON.stringify(body) : undefined
-  })
-    .then((response) => {
-      if (response.status === 204) {
-        return {}
-      }
+  }).then(async (response) => {
+    if (response.status === 204) {
+      return {}
+    }
+    if (response.ok) {
       return response.json()
-    })
-    .catch((err) => {
-      core.info(`Error fetching Jira API: ${err} ${JSON.stringify(err)}`)
-    })
+    }
+    const responseBody = await response.text()
+    throw new Error(`${response.status} ${responseBody}`)
+  })
 }
 
 async function findByIssue(issueUrl) {
@@ -41,14 +41,12 @@ async function findByIssue(issueUrl) {
   const query = encodeURIComponent(
     `${JIRA_JQL_FILTER} AND "${JIRA_GITHUB_URL_FIELD_ID}" = "${issueUrl}"`
   )
-  const r = await request(`search/jql?jql=${query}&fields=project`)
+  const r = await request(3, `search/jql?jql=${query}&fields=project`)
   return r.issues
 }
 
 async function transition(issue, commentBody) {
   const transitionId = await getTransitionForProject(issue.fields)
-  core.info(`Transitioning jira task ${issue.key} to status ${transitionId}.`)
-
   const transitionObject = {
     update: {
       comment: [
@@ -68,7 +66,9 @@ async function transition(issue, commentBody) {
       }
     }
   }
-  return request(`issue/${issue.id}/transitions`, transitionObject, 'POST')
+  core.info(`${JSON.stringify(transitionObject)}.`)
+
+  return request(2, `issue/${issue.key}/transitions`, transitionObject, 'POST')
 }
 
 export { findByIssue, transition }
