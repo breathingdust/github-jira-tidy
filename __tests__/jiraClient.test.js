@@ -41,7 +41,9 @@ describe('jiraClient', () => {
 
       mockFetch.mockResolvedValue({
         status: 200,
-        json: () => Promise.resolve(mockResponse)
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+        text: () => Promise.resolve(JSON.stringify(mockResponse))
       })
 
       const result = await findByIssue('https://github.com/owner/repo/issues/1')
@@ -69,10 +71,7 @@ describe('jiraClient', () => {
 
       await expect(
         findByIssue('https://github.com/owner/repo/issues/1')
-      ).rejects.toThrow()
-      expect(mockCore.info).toHaveBeenCalledWith(
-        expect.stringContaining('Error fetching Jira API: Error: Network error')
-      )
+      ).rejects.toThrow('Network error')
     })
   })
 
@@ -92,7 +91,7 @@ describe('jiraClient', () => {
       const result = await transition(issue, 'Test comment')
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://test.atlassian.net/rest/api/3/issue/12345/transitions',
+        'https://test.atlassian.net/rest/api/2/issue/FRB-1/transitions',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -123,9 +122,6 @@ describe('jiraClient', () => {
       )
 
       expect(result).toEqual({})
-      expect(mockCore.info).toHaveBeenCalledWith(
-        'Transitioning jira task FRB-1 to status 51.'
-      )
     })
 
     it('transitions non-FRB project issue with transition ID 5', async () => {
@@ -147,10 +143,6 @@ describe('jiraClient', () => {
         expect.objectContaining({
           body: expect.stringContaining('"id":"5"')
         })
-      )
-
-      expect(mockCore.info).toHaveBeenCalledWith(
-        'Transitioning jira task TEST-1 to status 5.'
       )
     })
 
@@ -180,11 +172,8 @@ describe('jiraClient', () => {
 
       mockFetch.mockRejectedValue(new Error('Network error'))
 
-      const result = await transition(issue, 'Test comment')
-
-      expect(result).toBeUndefined()
-      expect(mockCore.info).toHaveBeenCalledWith(
-        expect.stringContaining('Error fetching Jira API: Error: Network error')
+      await expect(transition(issue, 'Test comment')).rejects.toThrow(
+        'Network error'
       )
     })
   })

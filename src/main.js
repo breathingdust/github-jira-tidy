@@ -42,8 +42,6 @@ export async function run() {
   try {
     core.info(`Starting job for ${owner} ${repo}.`)
 
-    jiraClient.transition()
-
     const octokit = new Octokit()
     let issues = []
 
