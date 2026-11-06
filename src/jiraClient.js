@@ -6,6 +6,19 @@ const JIRA_USERNAME = core.getInput('jira_username')
 const JIRA_PASSWORD = core.getInput('jira_password')
 const JIRA_JQL_FILTER = core.getInput('jira_jql_filter')
 const JIRA_GITHUB_URL_FIELD_ID = core.getInput('jira_github_url_field_id')
+const JIRA_FRB_GITHUB_URL_FIELD_ID =
+  core.getInput('jira_frb_github_url_field_id') || JIRA_GITHUB_URL_FIELD_ID
+
+function buildSearchJql(issueUrl) {
+  if (JIRA_FRB_GITHUB_URL_FIELD_ID === JIRA_GITHUB_URL_FIELD_ID) {
+    return `${JIRA_JQL_FILTER} AND "${JIRA_GITHUB_URL_FIELD_ID}" = "${issueUrl}"`
+  }
+  return (
+    `(${JIRA_JQL_FILTER}) AND (` +
+    `(project = FRB AND "${JIRA_FRB_GITHUB_URL_FIELD_ID}" = "${issueUrl}") OR ` +
+    `(project != FRB AND "${JIRA_GITHUB_URL_FIELD_ID}" = "${issueUrl}"))`
+  )
+}
 
 async function getTransitionForProject(fields) {
   if (fields.project.key === 'FRB') {
@@ -38,9 +51,7 @@ async function request(apiVersion, url, body, method = 'GET') {
 
 async function findByIssue(issueUrl) {
   core.info(`Searching for jira issues linked to ${issueUrl}`)
-  const query = encodeURIComponent(
-    `${JIRA_JQL_FILTER} AND "${JIRA_GITHUB_URL_FIELD_ID}" = "${issueUrl}"`
-  )
+  const query = encodeURIComponent(buildSearchJql(issueUrl))
   const r = await request(3, `search/jql?jql=${query}&fields=project`)
   return r.issues
 }

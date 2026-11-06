@@ -11,7 +11,27 @@ const config = {
     format: 'es',
     sourcemap: true
   },
-  plugins: [commonjs(), nodeResolve({ preferBuiltins: true })]
+  // Node built-ins loaded lazily by dependencies (e.g. undici) must stay external.
+  external: ['node:sqlite'],
+  plugins: [commonjs(), nodeResolve({ preferBuiltins: true })],
+  onwarn(warning, warn) {
+    // Ignore circular dependencies inside third-party packages (e.g. @actions/core).
+    if (
+      warning.code === 'CIRCULAR_DEPENDENCY' &&
+      warning.ids?.every((id) => id.includes('node_modules'))
+    ) {
+      return
+    }
+    // TypeScript-emitted helpers in ESM deps use `this && this.__awaiter`,
+    // which safely falls back when `this` is undefined.
+    if (
+      warning.code === 'THIS_IS_UNDEFINED' &&
+      warning.id?.includes('node_modules')
+    ) {
+      return
+    }
+    warn(warning)
+  }
 }
 
 export default config
