@@ -32,6 +32,9 @@ on:
           jira_jql_filter: 'project in ("FOO","BAR") and "Team" = "beans"'
           jira_closed_id: '371'
           jira_github_url_field_id: 'Issue Link'
+          # Optional: FRB issues store the GitHub URL in a different field.
+          # Defaults to jira_github_url_field_id when omitted.
+          jira_frb_github_url_field_id: 'GitHub Issue/PR[URL Field]'
           github_release_name:
             ${{ needs.on-success-or-workflow-dispatch.outputs.release-tag }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
