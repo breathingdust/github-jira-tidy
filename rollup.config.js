@@ -22,6 +22,14 @@ const config = {
     ) {
       return
     }
+    // TypeScript-emitted helpers in ESM deps use `this && this.__awaiter`,
+    // which safely falls back when `this` is undefined.
+    if (
+      warning.code === 'THIS_IS_UNDEFINED' &&
+      warning.id?.includes('node_modules')
+    ) {
+      return
+    }
     warn(warning)
   }
 }
