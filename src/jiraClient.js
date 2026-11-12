@@ -22,7 +22,7 @@ function buildSearchJql(issueUrl) {
 
 async function getTransitionForProject(fields) {
   if (fields.project.key === 'FRB') {
-    return 51
+    return 18
   }
   return 5
 }

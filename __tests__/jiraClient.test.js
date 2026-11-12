@@ -76,7 +76,7 @@ describe('jiraClient', () => {
   })
 
   describe('transition', () => {
-    it('transitions FRB project issue with transition ID 51', async () => {
+    it('transitions FRB project issue with transition ID 18', async () => {
       const issue = {
         id: '12345',
         key: 'FRB-1',
@@ -110,7 +110,7 @@ describe('jiraClient', () => {
               ]
             },
             transition: {
-              id: '51'
+              id: '18'
             },
             fields: {
               resolution: {
